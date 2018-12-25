@@ -1,7 +1,7 @@
 package util
 
 import (
-	"DeBayerKit/constants"
+	"DeBayer/constants"
 	"image"
 	"image/jpeg"
 	"image/png"
@@ -14,6 +14,13 @@ Reader :interface of IO Reader
 */
 type Reader interface {
 	ReadImageFile(path string, format constants.ImageFileFormat) image.Image
+}
+
+/*
+Writer :interface of IO Writer
+*/
+type Writer interface {
+	WrireImageFile(path string, img image.Image, format constants.ImageFileFormat) bool
 }
 
 /*
@@ -35,6 +42,15 @@ func (i *IOTool) open(path string) *os.File {
 	return file
 }
 
+// create file
+func (i *IOTool) create(path string) *os.File {
+	file, err := os.Create(path)
+	if err != nil {
+		return nil
+	}
+	return file
+}
+
 /*
 IOReader :reader object
 */
@@ -44,10 +60,25 @@ type IOReader struct {
 }
 
 /*
+IOWriter :writer object
+*/
+type IOWriter struct {
+	IOTool
+	Writer // interface
+}
+
+/*
 NewIOReader :initializer of IOReader
 */
 func NewIOReader() *IOReader {
 	return new(IOReader)
+}
+
+/*
+NewIOWriter :initializer of IOWriter
+*/
+func NewIOWriter() *IOWriter {
+	return new(IOWriter)
 }
 
 /*
@@ -60,40 +91,69 @@ func (i *IOReader) ReadImageFile(path string, format constants.ImageFileFormat) 
 		return nil
 	}
 
+	// open file
+	file := i.open(path)
+	defer file.Close()
+
 	switch format {
-	/*
-		JPG file format case
-	*/
 	case constants.JPG:
-
-		// open file
-		file := i.open(path)
-		defer file.Close()
-
 		// read jpg file
 		img, err := jpeg.Decode(file)
 		if err != nil {
 			i.errorHandler(err)
+			return nil
 		}
 		return img
 
-	/*
-		PNG file format case
-	*/
 	case constants.PNG:
-
-		// open file
-		file := i.open(path)
-		defer file.Close()
-
 		// read png file
 		img, err := png.Decode(file)
 		if err != nil {
 			i.errorHandler(err)
+			return nil
 		}
 		return img
 
 	default:
 		return nil
+	}
+}
+
+/*
+WrireImageFile :implimentaion of image writer
+	in	:path string, img image.Image, format constants.ImageFileFormat
+	out	:bool
+*/
+func (i *IOWriter) WrireImageFile(path string, img image.Image, format constants.ImageFileFormat) bool {
+	if path == "" {
+		return false
+	}
+
+	if img == nil {
+		return false
+	}
+
+	// create file
+	file := i.create(path)
+	defer file.Close()
+
+	// crate file
+	switch format {
+	case constants.PNG:
+		err := png.Encode(file, img)
+		if err != nil {
+			i.errorHandler(err)
+			return false
+		}
+		return true
+	case constants.JPG:
+		err := jpeg.Encode(file, img, nil)
+		if err != nil {
+			i.errorHandler(err)
+			return false
+		}
+		return true
+	default:
+		return false
 	}
 }

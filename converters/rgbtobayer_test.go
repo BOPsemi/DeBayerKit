@@ -1,15 +1,17 @@
 package converters
 
 import (
-	"DeBayerKit/constants"
-	"DeBayerKit/util"
+	"DeBayer/constants"
+	"DeBayer/util"
+	"image/png"
+	"os"
 	"testing"
 
 	"github.com/stretchr/testify/assert"
 )
 
 const (
-	SAMPLEIMAGEPATH = "/Users/kazufumiwatanabe/go/src/DeBayerKit/data/IMG_0870.png"
+	SAMPLEIMAGEPATH = "/Users/kazufumiwatanabe/go/src/DeBayer/data/IMG_0870.png"
 )
 
 func TestNewNewStackToBayerConverter(t *testing.T) {
@@ -25,5 +27,14 @@ func TestNewNewStackToBayerConverter(t *testing.T) {
 
 	// check function
 	obj.ReArrangeToBayer()
+
+	// check deBayerImg
+	deBayerImg := obj.DeBayerImage()
+	assert.NotNil(t, deBayerImg)
+
+	file, _ := os.Create("/Users/kazufumiwatanabe/go/src/DeBayer/data/out.png")
+	defer file.Close()
+
+	png.Encode(file, deBayerImg)
 
 }

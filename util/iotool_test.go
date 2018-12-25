@@ -1,14 +1,14 @@
 package util
 
 import (
-	"DeBayerKit/constants"
+	"DeBayer/constants"
 	"testing"
 
 	"github.com/stretchr/testify/assert"
 )
 
 const (
-	SAMPLEIMAGEPATH = "/Users/kazufumiwatanabe/go/src/DeBayerKit/data/IMG_0023.jpeg"
+	SAMPLEIMAGEPATH = "/Users/kazufumiwatanabe/go/src/DeBayer/data/IMG_0870.png"
 )
 
 func TestNewIOReader(t *testing.T) {
@@ -18,7 +18,7 @@ func TestNewIOReader(t *testing.T) {
 
 func TestReadImageFile(t *testing.T) {
 	obj := NewIOReader()
-	img := obj.ReadImageFile(SAMPLEIMAGEPATH, constants.JPG)
+	img := obj.ReadImageFile(SAMPLEIMAGEPATH, constants.PNG)
 
 	assert.NotNil(t, img)
 }
