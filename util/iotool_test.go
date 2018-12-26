@@ -10,6 +10,8 @@ import (
 
 const (
 	SAMPLEIMAGEPATH = "/Users/kazufumiwatanabe/go/src/DeBayer/data/IMG_0870.png"
+	INIMG           = "/Users/kazufumiwatanabe/go/src/DeBayer/data/DSC01899.jpg"
+	OUTIMG          = "/Users/kazufumiwatanabe/go/src/DeBayer/data/DSC01899.png"
 )
 
 func TestNewIOReader(t *testing.T) {
@@ -32,4 +34,14 @@ func TestFilesInFolder(t *testing.T) {
 	assert.Equal(t, 2, len(list))
 
 	fmt.Println(list)
+}
+
+func TestImgFormatChange(t *testing.T) {
+	obj := NewImgFormatChange()
+
+	assert.NotNil(t, obj)
+
+	status := obj.JPGtoPNG(INIMG, OUTIMG)
+	assert.True(t, status)
+
 }

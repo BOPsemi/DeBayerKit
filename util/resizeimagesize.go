@@ -40,7 +40,7 @@ SetImageSize :set target image size
 	out	:bool
 */
 func (r *ResizeImage) SetImageSize(width, height int) bool {
-	if width <= 0 || height <= 0 {
+	if width <= 0 {
 		return false
 	}
 
