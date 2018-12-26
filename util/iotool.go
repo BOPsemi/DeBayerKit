@@ -5,8 +5,10 @@ import (
 	"image"
 	"image/jpeg"
 	"image/png"
+	"io/ioutil"
 	"log"
 	"os"
+	"path/filepath"
 )
 
 /*
@@ -14,6 +16,7 @@ Reader :interface of IO Reader
 */
 type Reader interface {
 	ReadImageFile(path string, format constants.ImageFileFormat) image.Image
+	FilesInFolder(path string) []string
 }
 
 /*
@@ -117,6 +120,32 @@ func (i *IOReader) ReadImageFile(path string, format constants.ImageFileFormat) 
 	default:
 		return nil
 	}
+}
+
+/*
+FilesInFolder :get file names in folder
+	in	:path string
+	out	:[]string
+*/
+func (i *IOReader) FilesInFolder(path string) []string {
+	if path == "" {
+		return nil
+	}
+
+	// read dir info
+	files, err := ioutil.ReadDir(path)
+	if err != nil {
+		i.errorHandler(err)
+		return nil
+	}
+
+	// get file names
+	var list []string
+	for _, file := range files {
+		list = append(list, filepath.Join(path, file.Name()))
+	}
+
+	return list
 }
 
 /*
