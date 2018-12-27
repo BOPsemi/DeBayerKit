@@ -35,13 +35,3 @@ func TestFilesInFolder(t *testing.T) {
 
 	fmt.Println(list)
 }
-
-func TestImgFormatChange(t *testing.T) {
-	obj := NewImgFormatChange()
-
-	assert.NotNil(t, obj)
-
-	status := obj.JPGtoPNG(INIMG, OUTIMG)
-	assert.True(t, status)
-
-}

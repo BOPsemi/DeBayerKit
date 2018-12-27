@@ -11,7 +11,7 @@ import (
 )
 
 const (
-	SAMPLEIMAGEPATH = "/Users/kazufumiwatanabe/go/src/DeBayer/data/IMG_0870.png"
+	SAMPLEIMAGEPATH = "/Users/kazufumiwatanabe/go/src/DeBayer/out/IMG_0028.png"
 )
 
 func TestNewNewStackToBayerConverter(t *testing.T) {
